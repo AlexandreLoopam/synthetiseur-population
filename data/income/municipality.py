@@ -73,7 +73,7 @@ def execute(context):
 
         # ... merge the data frames
         df = pd.concat([df, df_reconstructed])
-        
+
     assert len(df) == len(df["commune_id"].unique())
     assert len(requested_communes - set(df["commune_id"].unique())) == 0
 

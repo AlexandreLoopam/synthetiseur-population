@@ -128,17 +128,23 @@ def cut_feed(feed, df_area, crs = None):
     inside_stations = df_stations["stop_id"]
 
     # 1) Remove stations that are not inside stations and not have a parent stop
-    df_stops = feed["stops"]
 
-    df_stops = df_stops[
-        df_stops["parent_station"].isin(inside_stations) |
-        (
-            df_stops["parent_station"].isna() &
-            df_stops["stop_id"].isin(inside_stations)
-        )
-    ]
+    df_stops = feed["stops"]
+    if "parent_station" in df_stops :
+        df_stops = df_stops[
+            df_stops["parent_station"].isin(inside_stations) |
+            (
+                df_stops["parent_station"].isna() &
+                df_stops["stop_id"].isin(inside_stations)
+            )
+        ]
+
+    else :
+        df_stops["parent_station"] = np.nan
+
 
     feed["stops"] = df_stops.copy()
+
     remaining_stops = feed["stops"]["stop_id"].unique()
 
     # 2) Remove stop times
